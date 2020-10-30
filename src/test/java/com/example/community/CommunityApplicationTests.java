@@ -1,9 +1,12 @@
 package com.example.community;
 
 import com.example.community.dao.DiscussPostMapper;
+import com.example.community.dao.LoginTicketMapper;
 import com.example.community.dao.UserMapper;
 import com.example.community.entity.DiscussPost;
+import com.example.community.entity.LoginTicket;
 import com.example.community.entity.User;
+import com.example.community.until.MailClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.annotation.MapperScan;
@@ -11,7 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -66,4 +73,43 @@ public class CommunityApplicationTests {
         userMapper.updateStatus(3,2);
     }
 
+    @Autowired
+    private MailClient mailClient;
+    @Autowired
+    private TemplateEngine templateEngine;
+    @Test
+    public void testTextMail(){
+        mailClient.sendMail("1406364179@qq.com","Test","内容");
+    }
+    @Test
+    public void testHtmlMail(){
+        Context context=new Context();
+        context.setVariable("username","lvjiacheng");
+        String content=templateEngine.process("/mail/demo",context);
+        System.out.println(content);
+        mailClient.sendMail("1406364179@qq.com","Html测试",content);
+    }
+
+    @Autowired
+    private LoginTicketMapper loginTicketMapper;
+
+    @Test
+    public void testInsertLoginTicket(){
+        LoginTicket loginTicket=new LoginTicket();
+        loginTicket.setUserId(101);
+        loginTicket.setTicket("abc");
+        loginTicket.setStatus(0);
+        loginTicket.setExpired(new Timestamp(System.currentTimeMillis()+1000*60*10));
+        loginTicketMapper.insertLoginTicket(loginTicket);
+    }
+
+    @Test
+    public void testSelectLoginTicket(){
+        LoginTicket loginTicket=loginTicketMapper.selectByTicket("abc");
+        System.out.println(loginTicket);
+
+        loginTicketMapper.updateStatus("abc",1);
+        loginTicket=loginTicketMapper.selectByTicket("abc");
+        System.out.println(loginTicket);
+    }
 }

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆</title>
+</head>
+<body>
+<form method="post" th:action="@{/login}">
+    <input type="text" name="username" th:value="${param.username}" placeholder="帐号"><br/>
+    <div th:text="${usernameMsg}"></div>
+    <input type="text" name="password" th:value="${param.password}" placeholder="密码"><br/>
+    <img th:src="@{/kaptcha}"><br/>
+    <input type="text" name="code" placeholder="验证码"><br/>
+    <input type="checkbox" name="remember" th:value="${param.remember}" checked="checked"/>
+    <input type="submit" value="登陆"></input>
+</form>
+</body>
+</html>

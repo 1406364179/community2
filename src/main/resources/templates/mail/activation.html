@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>激活帐号</title>
+</head>
+<body>
+<p>
+    <b th:text="${email}"></b>,您好！
+</p>
+<p>
+    您正在注册，这是一份激活邮件，请点击
+    <a th:href="${url}"><span th:text="${url}"></span>此链接</a>
+    激活
+</p>
+</body>
+</html>
